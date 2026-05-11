@@ -99,9 +99,10 @@ mask_soft[idx_opt] = True
 mask_hard[idx_opt] = True
 
 # Plotting the V-curve and real physical extension
-ax.plot(k_range[mask_soft], angle_dev_raw[mask_soft], color='#8B008B', linewidth=3.5, linestyle='-', label='Posterior Tilt')
-ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color='#8B008B', linewidth=3.5, linestyle='--', label='Anterior Tilt')
-ax.plot(k_range[mask_hard], angle_dev_raw[mask_hard], color='#8B008B', linewidth=3.5, linestyle='-', alpha=0.6)
+ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='-', label='Posterior Tilt', zorder=5)
+ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color="#8B008B", linewidth=3.5, linestyle='--', label='abs', zorder=5)
+ax.plot(k_range[mask_hard], angle_dev_raw[mask_hard], color="#00D12D", linewidth=3.5, linestyle='-', label='Anterior Tilt', zorder=5)
+
 
 ax.set_ylim(-45, 45) 
 ax.set_xlim(300, 3500)
