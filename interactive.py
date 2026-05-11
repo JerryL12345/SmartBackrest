@@ -70,7 +70,7 @@ with col1:
 with col2:
     st.metric(label="Target Lumbar Gap", value=f"{target_gap*100:.2f} cm")
 with col3:
-    st.metric(label="Actual Cushion Compression", value=f"{required_compression*100:.2f} cm", delta="Physics Corrected")
+    st.metric(label="Actual Cushion Compression", value=f"{required_compression*100:.2f} cm")
 with col4:
     st.metric(label="★ Recommended Stiffness (k)", value=f"{k_val:.0f} N/m", delta="Updates dynamically")
 
