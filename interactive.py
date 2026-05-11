@@ -99,17 +99,17 @@ mask_soft[idx_opt] = True
 mask_hard[idx_opt] = True
 
 # Plotting the V-curve and real physical extension
-ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='--', label='+ Deviation: Support Collapse / Posterior Tilt')
-ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color='#8B008B', linewidth=3.5, linestyle='-', label='- Deviation (Abs): Over-Push / Anterior Tilt')
-ax.plot(k_range[mask_hard], angle_dev_raw[mask_hard], color='#8B008B', linewidth=3.5, linestyle='-', alpha=0.6)
+ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='--', label='Posterior Tilt')
+ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color='#8B008B', linewidth=3.5, linestyle='-', label='Anterior Tilt')
+ax.plot(k_range[mask_soft], angle_dev_raw[mask_soft], color='#8B008B', linewidth=3.5, linestyle='-', alpha=0.6)
 
 ax.set_ylim(-45, 45) 
 ax.set_xlim(300, 3500)
 
 bbox_style = dict(boxstyle='round,pad=0.6', alpha=0.9, edgecolor='gray')
-ax.text(text_x_soft, 38, '[Too Soft]\nCollapse & High Shear Stress', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
-ax.text(text_x_opt, 38, '[Golden Sweet Spot]\nMaintains 30° Healthy Angle', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
-ax.text(text_x_hard, 38, '[Too Hard]\nOver-Push & Reverse Stress', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
+ax.text(text_x_soft, 38, '[Too Soft]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
+ax.text(text_x_opt, 38, '[Golden Sweet Spot]', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
+ax.text(text_x_hard, 38, '[Too Hard]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
 
 ax.legend(loc='lower left', fontsize=12, framealpha=0.95)
 
