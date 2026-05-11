@@ -87,17 +87,17 @@ idx_opt = np.argmin(angle_dev_abs)
 mask_soft[idx_opt] = True
 mask_hard[idx_opt] = True
 
-ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='--', label='Negative folded: support collapse / posterior pelvic tilt')
-ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color='#8B008B', linewidth=3.5, linestyle='-', label='Positive: over-pushing / anterior pelvic tilt')
+ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='--', label='posterior pelvic tilt')
+ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color='#8B008B', linewidth=3.5, linestyle='-', label='anterior pelvic tilt')
 ax.plot(k_range[mask_soft], angle_dev_raw[mask_soft], color='#8B008B', linewidth=3.5, linestyle='-')
 
 ax.set_ylim(-75, 85) 
 ax.set_xlim(400, 4000)
 
 bbox_style = dict(boxstyle='round,pad=0.6', alpha=0.9, edgecolor='gray')
-ax.text(text_x_soft, 75, '[Too Soft]\nSupport collapse, high posterior shear', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
-ax.text(text_x_opt, 75, '[Golden Comfort Zone]\nMaintain healthy 30° angle', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
-ax.text(text_x_hard, 75, '[Too Hard]\nExcessive push-back, reverse stress', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
+ax.text(text_x_soft, 75, '[Too Soft]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
+ax.text(text_x_opt, 75, '[Golden Comfort Zone]', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
+ax.text(text_x_hard, 75, '[Too Hard]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
 
 ax.legend(loc='upper right', fontsize=12, framealpha=0.95)
 
