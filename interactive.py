@@ -9,8 +9,6 @@ import warnings
 st.set_page_config(page_title="Lumbar Cushion Optimizer", page_icon="🪑", layout="wide")
 warnings.filterwarnings('ignore')
 
-# Note: Removed Chinese font settings. English text will render perfectly on all servers.
-
 # ==========================================
 # 1. Title & Sidebar UI
 # ==========================================
@@ -26,15 +24,17 @@ current_theta = st.sidebar.slider(
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
 **🎯 Physics Correction Notes:**
-* "Geometric Gap" and "Material Compression" are now strictly decoupled.
-* Authentic stiffness requirements are softer than preliminary linear models.
+* Physiological height (lever arm) and material thickness are now strictly decoupled.
+* "Geometric Gap" and "Material Compression" are accurately mapped.
 * Safely retains residual thickness for structural back support.
 """)
 
 # ==========================================
-# 2. Core Mathematics & Physics Engine
+# 2. Core Mathematics & Physics Engine (Decoupled)
 # ==========================================
-G, h_pad, F_pad_max = 314.5, 0.065, 60.0
+G, F_pad_max = 314.5, 60.0
+y_pad = 0.08       # Physiological height / lever arm (8 cm)
+t_pad = 0.065      # Initial physical thickness of the cushion (6.5 cm)
 alpha_target = np.radians(12.5)
 k_range = np.linspace(300, 3500, 200) 
 
@@ -43,21 +43,21 @@ alpha_flat_deg = max(0, 15.0 - 0.5 * abs(90.0 - current_theta))
 alpha_flat = np.radians(alpha_flat_deg)
 
 # --- The Authentic Physical Logic ---
-# Step 1: Geometric gap to restore the healthy 30° curve
-target_gap = h_pad * np.sin(alpha_target - alpha_flat)
+# Step 1: Geometric gap to restore the healthy 12.5° curve (Uses lever arm y_pad)
+target_gap = y_pad * np.sin(alpha_target - alpha_flat)
 
-# Step 2: Actual required compression = Initial thickness - Residual thickness needed
-required_compression = h_pad - target_gap
+# Step 2: Actual required compression = Initial thickness - Residual thickness needed (Uses thickness t_pad)
+required_compression = t_pad - target_gap
 
 # Step 3: Derive true equivalent stiffness k (Hooke's Law: F = kx)
 k_val = F_pad_max / required_compression
 
 # Step 4: Calculate actual sacral angle variation across the stiffness spectrum
-actual_compression = np.minimum(F_pad_max / k_range, h_pad)
-actual_gap_filled = h_pad - actual_compression # True residual thickness
-alpha_actual = alpha_flat + np.arcsin(actual_gap_filled / h_pad)
+actual_compression = np.minimum(F_pad_max / k_range, t_pad) # Limited by thickness t_pad
+actual_gap_filled = t_pad - actual_compression # True residual thickness
+alpha_actual = alpha_flat + np.arcsin(actual_gap_filled / y_pad) # Angle geometry uses lever arm y_pad
 
-# Angle Deviation = Target Angle (30°) - Actual Angle
+# Angle Deviation = Target Angle - Actual Angle
 angle_dev_raw = np.degrees(alpha_target - alpha_actual)
 angle_dev_abs = np.abs(angle_dev_raw)
 
@@ -92,30 +92,29 @@ text_x_opt = (zone_left + zone_right) / 2
 text_x_hard = zone_right + (3500 - zone_right) * 0.35 
 
 # Masking for physical signs
-mask_soft = angle_dev_raw > 0  # Too soft: Actual angle < 30, Positive deviation
-mask_hard = angle_dev_raw <= 0 # Too hard: Actual angle > 30, Negative deviation
+mask_soft = angle_dev_raw > 0  # Too soft: Positive deviation
+mask_hard = angle_dev_raw <= 0 # Too hard: Negative deviation
 idx_opt = np.argmin(angle_dev_abs)
 mask_soft[idx_opt] = True
 mask_hard[idx_opt] = True
 
-# Plotting the V-curve and real physical extension
-ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='-', label='Posterior Tilt', zorder=5)
-ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color="#8B008B", linewidth=3.5, linestyle='--', label='abs', zorder=5)
-ax.plot(k_range[mask_hard], angle_dev_raw[mask_hard], color="#00D12D", linewidth=3.5, linestyle='-', label='Anterior Tilt', zorder=5)
-
+# Plotting the V-curve and real physical extension (with the green curve update)
+ax.plot(k_range[mask_soft], angle_dev_abs[mask_soft], color='#8B008B', linewidth=3.5, linestyle='-', label='+ Deviation: Support Collapse / Posterior Tilt')
+ax.plot(k_range[mask_hard], angle_dev_abs[mask_hard], color='#8B008B', linewidth=3.5, linestyle='--', label='- Deviation (Abs)')
+ax.plot(k_range[mask_hard], angle_dev_raw[mask_hard], color='#00D12D', linewidth=3.5, linestyle='-', label='- Deviation: Over-Push / Anterior Tilt', zorder=5)
 
 ax.set_ylim(-45, 45) 
 ax.set_xlim(300, 3500)
 
 bbox_style = dict(boxstyle='round,pad=0.6', alpha=0.9, edgecolor='gray')
-ax.text(text_x_soft, 38, '[Too Soft]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
-ax.text(text_x_opt, 38, '[Golden Sweet Spot]', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
-ax.text(text_x_hard, 38, '[Too Hard]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
+ax.text(text_x_soft, 38, '[Too Soft]\nCollapse & High Shear Stress', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
+ax.text(text_x_opt, 38, f'[Golden Sweet Spot]\nMaintains {np.degrees(alpha_target):.1f}° Healthy Angle', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
+ax.text(text_x_hard, 38, '[Too Hard]\nOver-Push & Reverse Stress', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
 
 ax.legend(loc='lower left', fontsize=12, framealpha=0.95)
 
 # Mark the optimal point
-ax.plot(k_val, angle_dev_abs[idx_opt], '*', color='#FF1493', markersize=40, zorder=10)
+ax.plot(k_val, angle_dev_abs[idx_opt], '*', color='#FF1493', markersize=35, zorder=10)
 
 ax.set_xlabel('Equivalent Cushion Stiffness k (N/m)', fontsize=14, fontweight='bold')
 ax.set_ylabel('Absolute Sacral Angle Deviation (|Δα|°)', fontsize=14, fontweight='bold')
