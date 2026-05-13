@@ -107,7 +107,7 @@ ax.set_ylim(-45, 45)
 ax.set_xlim(300, 3500)
 
 bbox_style = dict(boxstyle='round,pad=0.6', alpha=0.9, edgecolor='gray')
-ax.text(text_x_soft, 38, '[Too Soft], fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
+ax.text(text_x_soft, 38, '[Too Soft]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffe6e6'))
 ax.text(text_x_opt, 38, f'[Golden Sweet Spot]\nMaintains\n {np.degrees(alpha_target):.1f}° \nHealthy Angle', fontsize=13, ha='center', va='center', fontweight='bold', bbox=dict(**bbox_style, facecolor='#ccffcc'))
 ax.text(text_x_hard, 38, '[Too Hard]', fontsize=12, ha='center', va='center', bbox=dict(**bbox_style, facecolor='#ffffe6'))
 
