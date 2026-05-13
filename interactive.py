@@ -33,7 +33,7 @@ st.sidebar.markdown("""
 # 2. Core Mathematics & Physics Engine (Decoupled)
 # ==========================================
 G, F_pad_max = 314.5, 60.0
-y_pad = 0.08       # Physiological height / lever arm (8 cm)
+y_pad = 0.09       # Physiological height / lever arm (8 cm)
 t_pad = 0.065      # Initial physical thickness of the cushion (6.5 cm)
 alpha_target = np.radians(12.5)
 k_range = np.linspace(300, 3500, 200) 
