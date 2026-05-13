@@ -34,8 +34,8 @@ st.sidebar.markdown("""
 # ==========================================
 # 2. Core Mathematics & Physics Engine
 # ==========================================
-G, h_pad, F_pad_max = 314.5, 0.11, 60.0
-alpha_target = np.radians(30.0)
+G, h_pad, F_pad_max = 314.5, 0.065, 60.0
+alpha_target = np.radians(12.5)
 k_range = np.linspace(300, 3500, 200) 
 
 # Risk angle without support
